@@ -1,0 +1,65 @@
+<main>
+  <header class="tool-header">
+    Name of the Chart
+    <input type="text" id="diagram-name"/>
+    <button id="diagram-saving">Save Chart</button>
+    <input type='number' placeholder='Single Circle Radius' 
+      id='single-circle-radius'>
+    <button class="builder-function-toggle toggle-on" 
+      id="circle_creation">
+      Create Point
+    </button>
+    <button class="builder-function-toggle" id="circle_deletion">
+      Delete Point
+    </button>
+    <button class="builder-function-toggle" id="point_selection">
+      Point Selection
+    </button>
+    <button id="draw-line-but" data-type="horizontal">
+      Draw line horizontal
+    </button>
+    <button id="draw-vertical-line-but" data-type="vertical">
+      Draw line vertical
+    </button>
+    <button class="builder-function-toggle" id="line_deletion">
+      Delete Line
+    </button>
+    <input type="number" placeholder="Curve Degree" id="line-curve"/>
+    <br/>
+    <p></p>
+    <input type="number" placeholder="Row" id="section-row"/>
+    <input type="text" placeholder="R Start Number/Letter" 
+      id="row-start-num" />
+    <input type="number" placeholder="Column" id="section-column"/>
+    <input type="number" placeholder="C Start Number" 
+      id="column-start-num" />
+    <input type="number" placeholder="Margin" id="row-margin"/>
+    <button id="create-section">Create Section</button>
+    <button id="undo-section">Undo Last Section</button>
+    <br />
+    <p></p>
+    <input type="text" placeholder="Text for Map" id="map-text">
+    <button class="builder-function-toggle" id="text_creation">
+      Insert text
+    </button>
+    <button class="builder-function-toggle" id="text_selection">
+      Select text
+    </button>
+    <button id="text-row-creation">Create text row</button>
+  </header>
+  <div class="mad-house-seating">
+    <%= inline_svg('qe_upper.svg', 
+      {id: "seatty-for-real"}) %>
+    <%= inline_svg('qe_updated_seating.svg') %>
+  </div>
+  <div class="sample-seating">
+<!--     @diagrams.last.makeup.html_safe -->
+  </div>
+</main>
+
+<canvas id="canvas-baby">
+
+</canvas>
+
+
+

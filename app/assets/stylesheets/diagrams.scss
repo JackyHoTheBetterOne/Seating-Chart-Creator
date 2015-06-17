@@ -1,0 +1,37 @@
+// Place all the styles related to the diagrams controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+$epic-color: #551A8B !important;
+
+
+.toggle-on {
+  background: $epic-color;
+  color: white;
+  outline: none;
+  transition: 0.3s;
+  border: none;
+  border-radius: 5px;
+}
+
+.selected-circle, .selected-text {
+  fill: $epic-color;
+  transition: 0.3;
+}
+
+.selected-line {
+  stroke: $epic-color;
+  transition: 0.3s;
+}
+
+.tool-header {
+  position: fixed;
+  top: 0px;
+  z-index: 1;
+  background-color: aliceblue;
+}
+
+.mad-house-seating {
+  position: absolute;
+  top: 120px;
+}
