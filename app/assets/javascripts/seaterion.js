@@ -10,7 +10,7 @@
 
   Seaterion.prototype = {
     createText: function (object) {
-      var 
+      var
         self = this,
         text = document.createElementNS(svg_site, 'text'),
         attr = object["attr"];
@@ -30,14 +30,14 @@
     },
 
     generateTextRow: function(text, row, margin) {
-      var 
+      var
         self = this,
         txt = text.innerHTML,
         x = parseFloat(text.getAttribute('x')),
         y = parseFloat(text.getAttribute('y')),
         group = document.createElementNS(svg_site, "g");
       for(var i=0; i<row; i++) {
-        var 
+        var
           addition = margin*(i+1),
           text_element = self.createText({
             type: "group",
@@ -58,14 +58,14 @@
     },
 
     generateTextSection: function(path, row, margin, row_start) {
-      var 
+      var
         self = this,
         group = document.createElementNS(svg_site, 'g'),
         row_array = self.check_and_return_row_array(row_start, row),
         row_array = row_array.reverse();
 
       for(var row_reached = 0; row_reached < row; row_reached++) {
-        var 
+        var
           length = row_reached*(margin+5),
           obj = path.getPointAtLength(length),
           text_element = self.createText({
@@ -82,19 +82,19 @@
         group.appendChild(text_element);
       }
       self.lastSections.push(group);
-      self.svg.appendChild(group); 
-      return self; 
+      self.svg.appendChild(group);
+      return self;
     },
 
     createCircle: function (object) {
-      var 
+      var
         self = this,
         circle = document.createElementNS(svg_site, 'circle');
       object["style"] = object["style"] || '-webkit-tap-highlight-color: rgba(0, 0, 0, 0);';
       object["stroke-width"] = object["stroke-width"] || '1.1096605744125327';
       object["stroke"] = object["stroke"] || 'none';
       object["fill"] = object["fill"] || "#3b77bf";
-      object["group"] = object["group"] || false; 
+      object["group"] = object["group"] || false;
 
       for (var prop in object) {
         if (prop !== 'group') {
@@ -113,7 +113,7 @@
     deleteCircle: function (circle) {
       var self = this;
       if (circle.className.baseVal.indexOf('seat-circle') !== -1) {
-        var 
+        var
           deleted_num = parseInt(circle.getAttribute('data-column')),
           circle_row = circle.getAttribute('data-row'),
           row_class_name = "row-" + circle_row,
@@ -134,12 +134,12 @@
             peer_column = parseInt(peer_circle.getAttribute('data-column')),
             peer_row = peer_circle.getAttribute('data-row')
           if(peer_column > deleted_num && circle_row === peer_row) {
-            var 
+            var
               new_peer_column = peer_column - 1,
               className = peer_circle.className.baseVal,
               new_column_class = 'column-' + new_peer_column,
               old_column_class = 'column-' + peer_column;
-            peer_circle.setAttribute('data-column', new_peer_column);  
+            peer_circle.setAttribute('data-column', new_peer_column);
             peer_circle.setAttribute('class', className.replace(old_column_class, new_column_class));
           }
         }
@@ -149,7 +149,7 @@
     },
 
     deleteLastGroup: function () {
-      var 
+      var
         self = this,
         sections = self.lastSections,
         length = sections.length,
@@ -167,7 +167,7 @@
     },
 
     createPath: function (c1, c2, curve, type) {
-      var 
+      var
         self = this,
         path = document.createElementNS(svg_site, 'path'),
         cA, cB, x1, y1, x2, y2, drawing;
@@ -195,7 +195,7 @@
     },
 
     changePath: function (path, curve) {
-      var 
+      var
         self = this,
         x1 = path.getAttribute('data-x1'),
         y1 = path.getAttribute('data-y1'),
@@ -224,14 +224,14 @@
     },
 
     check_and_return_row_array: function(row_start, row) {
-      var 
+      var
         self = this,
         row_num = parseInt(row_start);
       return (row_num > 0) ? self.get_num_array(row_num, row):self.get_char_array(row_start, row);
     },
 
     createSeatSection: function(path, column, row, margin, column_start, row_start) {
-      var 
+      var
         self = this,
         length = path.getTotalLength(),
         ball_width = length/column,
@@ -246,7 +246,7 @@
       column_array = column_array.reverse();
       for(var row_index = 0;row_reached < row;row_reached++){
         for(var column_coverage = 0, column_index = 0, column_num = 0; column_num < column; column_num+=1) {
-          var 
+          var
             obj = path.getPointAtLength(column_coverage+0.52*(1+column_num)),
             row_num = row_array[row_index],
             column_num_tbi = column_array[column_index],
@@ -257,7 +257,8 @@
               group: true,
               class: 'seat-circle ' + 'row-' + row_num + ' column-' + column_num_tbi,
               'data-row': row_num,
-              'data-column': column_num_tbi
+              'data-column': column_num_tbi,
+              id: row_num + "-" + column_num_tbi
             });
           column_index += 1;
           group.appendChild(circle);
@@ -271,35 +272,44 @@
       return self;
     },
 
-    getSeatObject: function() {
-      var 
+    getSeatObject: function(type) {
+      var
         circle_array = document.getElementsByTagName('circle'),
         row_array = [],
         seat_obj = {};
-      
+        x_coors_obj = {};
+
       for(var i = 0; i<circle_array.length; i++) {
         var row = circle_array[i].getAttribute('data-row');
         if(row_array.indexOf(row) === -1) {
-          row_array.push(row); 
-        } 
+          row_array.push(row);
+        }
       }
 
       for(var row_index = 0; row_index<row_array.length; row_index++) {
-        var 
+        var
           row = row_array[row_index],
           column_array = document.getElementsByClassName('row-' + row),
           column_num_array = [];
+          column_x_coors_array = [];
         for(var column_index = 0; column_index<column_array.length; column_index++) {
-          var 
+          var
             element = column_array[column_index],
-            num = element.getAttribute('data-column');
+            num = element.getAttribute('data-column'),
+            coor = element.getAttribute('cx');
           column_num_array.push(num);
+          column_x_coors_array.push(coor);
         }
 
         seat_obj[row] = column_num_array;
+        x_coors_obj[row] = column_x_coors_array;
       }
-      
-      return seat_obj;
+
+      if (type === "column") {
+        return seat_obj;
+      } else if (type === 'x-coors') {
+        return x_coors_obj;
+      }
     }
   };
 
@@ -307,7 +317,7 @@
     var self = this;
     if (!svg_id) {
       throw "An id pointing to a SVG HTML element is required";
-    };
+    }
     self.svg = document.getElementById(svg_id);
     self.svg_id = svg_id;
     self.lastSections = [];
@@ -321,6 +331,3 @@
   }
 
 })(window, jQuery);
-
-
-

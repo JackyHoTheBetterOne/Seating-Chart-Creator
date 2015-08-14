@@ -45,8 +45,8 @@ window.ajax_insane_style = (obj) ->
   method = obj["method"].toUpperCase()
   if method is "POST"
     request.open("POST", url, true)
-    # request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")  
     request.setRequestHeader("X-CSRF-Token", $('meta[name="csrf-token"]').attr('content'))
+    # request.setRequestHeader("Content-type", "application/x-www-form-urlencoded")  
     # request.setRequestHeader("Content-length", params.length)
     # request.setRequestHeader("Connection", "close")
     request.send(params)
