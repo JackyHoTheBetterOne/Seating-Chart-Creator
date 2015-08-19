@@ -22,11 +22,13 @@ document.addEventListener 'page:change', (event) ->
         if typeof path isnt "undefined"
           column = parseInt(document.getElementById("section-column").value)
           row = parseInt(document.getElementById("section-row").value)
-          margin = parseFloat(document.getElementById("row-margin").value)
+          column_margin = parseFloat(document.getElementById("column-margin").value)
+          row_margin = parseFloat(document.getElementById("row-margin").value)
           row_start_num = document.getElementById('row-start-num').value
           column_start_num = document.getElementById('column-start-num').value
-          BUILDER.chart.createSeatSection(path, column, row, 
-              margin, column_start_num, row_start_num)
+          radius = parseFloat(document.getElementById('circle-radius').value)
+          BUILDER.chart.createSeatSection(path, column, row, column_margin,
+              row_margin, column_start_num, row_start_num, radius)
           BUILDER.attach_circle_event({category: 'general'}, BUILDER.events.delete_circle)
         else
           alert('Please select a base row')
@@ -34,7 +36,7 @@ document.addEventListener 'page:change', (event) ->
         element = document.getElementsByClassName("selected-line")[0]
         if typeof element is 'undefined'
           alert('Must select a line first')
-        else 
+        else
           value = parseFloat(event.target.value)
           BUILDER.chart.changePath(element, value)
       select_line: (event) ->
@@ -69,7 +71,7 @@ document.addEventListener 'page:change', (event) ->
         circle = this
         point_arr = BUILDER.two_way_points
         if BUILDER.toggle_object.point_selection
-          if point_arr.length == 2 
+          if point_arr.length == 2
             index = point_arr.indexOf(circle)
             if index isnt -1
               circle.setAttribute('class', 'point-circle')
@@ -121,7 +123,7 @@ document.addEventListener 'page:change', (event) ->
         BUILDER.chart.generateTextSection(path, row, margin, row_start)
       point_creation: (event) ->
         map = BUILDER.chart.svg
-        if BUILDER.toggle_object.circle_creation  
+        if BUILDER.toggle_object.circle_creation
           radius_input = document.getElementById('single-circle-radius').value
           pt = BUILDER.convert_mouse_click_coors(map, event)
           coor_x = pt.x
@@ -178,7 +180,7 @@ document.addEventListener 'page:change', (event) ->
           circle_array = document.getElementsByTagName('circle')
         when 'point'
           circle_array = document.getElementsByClassName('point-circle')
-        when 'seat' 
+        when 'seat'
           circle_array = document.getElementsByClassName('seat-circle')
       i = 0
       length = circle_array.length
@@ -221,8 +223,3 @@ document.addEventListener 'page:change', (event) ->
     'click', BUILDER.events.undoSection, false)
   document.getElementById('text-row-creation').addEventListener(
     'click', BUILDER.events.text_row_creation, false)
-
-
-
-
-

@@ -3,9 +3,9 @@
     Name of the Chart
     <input type="text" id="diagram-name"/>
     <button id="diagram-saving">Save Chart</button>
-    <input type='number' placeholder='Single Circle Radius' 
+    <input type='number' placeholder='Single Circle Radius'
       id='single-circle-radius'>
-    <button class="builder-function-toggle toggle-on" 
+    <button class="builder-function-toggle toggle-on"
       id="circle_creation">
       Create Point
     </button>
@@ -28,12 +28,14 @@
     <br/>
     <p></p>
     <input type="number" placeholder="Row" id="section-row"/>
-    <input type="text" placeholder="R Start Number/Letter" 
+    <input type="text" placeholder="R Start Number/Letter"
       id="row-start-num" />
     <input type="number" placeholder="Column" id="section-column"/>
-    <input type="number" placeholder="C Start Number" 
+    <input type="number" placeholder="C Start Number"
       id="column-start-num" />
-    <input type="number" placeholder="Margin" id="row-margin"/>
+    <input type="number" placeholder="Row Margin" id="row-margin" />
+    <input type="number" placeholder="Column Margin" id="column-margin" />
+    <input type="number" placeholder="Radius" id="circle-radius" />
     <button id="create-section">Create Section</button>
     <button id="undo-section">Undo Last Section</button>
     <br />
@@ -48,7 +50,7 @@
     <button id="text-row-creation">Create text row</button>
   </header>
   <div class="mad-house-seating">
-    <%= inline_svg('qe_upper.svg', 
+    <%= inline_svg('qe_upper.svg',
       {id: "seatty-for-real"}) %>
   </div>
   <div class="sample-seating">
@@ -60,6 +62,3 @@
 <canvas id="canvas-baby">
 
 </canvas>
-
-
-

@@ -189,21 +189,24 @@
       path.setAttribute('data-y1', y1)
       path.setAttribute('data-x2', x2)
       path.setAttribute('data-y2', y2)
+      path.setAttribute('data-curve', curve)
 
       self.svg.appendChild(path);
       return self;
     },
 
-    changePath: function (path, curve) {
+    changePath: function (path, curve, extention) {
       var
         self = this,
-        x1 = path.getAttribute('data-x1'),
+        extention = parseFloat(extention) || 0.00,
+        x1 = (parseFloat(path.getAttribute('data-x1')) - extention).toString(),
         y1 = path.getAttribute('data-y1'),
-        x2 = path.getAttribute('data-x2'),
+        x2 = (extention + parseFloat(path.getAttribute('data-x2'))).toString(),
         y2 = path.getAttribute('data-y2'),
         drawing = 'M' + x1 + ',' + y1 + ' C' + x1 + ',' + (y1-curve) + ' ' + x2 + ',' + (y2-curve) + ' ' + x2 + ',' + y2;
 
       path.setAttribute('d', drawing);
+      path.setAttribute('data-curve', curve)
       return self;
     },
 
@@ -230,24 +233,33 @@
       return (row_num > 0) ? self.get_num_array(row_num, row):self.get_char_array(row_start, row);
     },
 
-    createSeatSection: function(path, column, row, margin, column_start, row_start) {
+    createSeatSection: function(path, column, row, column_margin, row_margin, column_start, row_start, radius) {
       var
         self = this,
         length = path.getTotalLength(),
-        ball_width = length/column,
-        radius = ball_width/2,
+        ball_width = radius*2,
         row_reached = 0,
         row_coverage = 0,
         group = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
       // var group = document.createDocumentFragment();
         column_array = self.get_num_array(parseInt(column_start), column),
-        row_array = self.check_and_return_row_array(row_start, row);
+        row_array = self.check_and_return_row_array(row_start, row),
+        column_starting_point = ((length-(radius*2+column_margin)*column+column_margin)/2);
+
+      if (column_starting_point < -0.05) {
+        self.changePath(path,
+          path.getAttribute("data-curve"),
+          (column_starting_point*-1.20));
+        self.createSeatSection(path, column, row, column_margin, row_margin, column_start, row_start, radius);
+        return self;
+      }
+
       row_array = row_array.reverse();
       column_array = column_array.reverse();
       for(var row_index = 0;row_reached < row;row_reached++){
-        for(var column_coverage = 0, column_index = 0, column_num = 0; column_num < column; column_num+=1) {
+        for(var column_coverage = column_starting_point, column_index = 0, column_num = 0; column_num < column; column_num+=1) {
           var
-            obj = path.getPointAtLength(column_coverage+0.52*(1+column_num)),
+            obj = path.getPointAtLength(column_coverage+radius),
             row_num = row_array[row_index],
             column_num_tbi = column_array[column_index],
             circle = self.createCircle({
@@ -262,10 +274,10 @@
             });
           column_index += 1;
           group.appendChild(circle);
-          column_coverage += ball_width;
+          column_coverage += (ball_width+column_margin);
         }
         row_index += 1;
-        row_coverage += (radius+margin);
+        row_coverage += (ball_width+row_margin);
       }
       self.lastSections.push(group);
       self.svg.appendChild(group);
